@@ -12,7 +12,7 @@ const AddProduct = () => {
     category: 'women',
     new_price: '',
     old_price: '',
-    
+
   })
 
   const imageHandler = (e) => {
@@ -23,46 +23,14 @@ const AddProduct = () => {
     setProductDetails({ ...productDetails, [e.target.name]: e.target.value })
   }
 
- {/* const Add_Product = async () => {
-    console.log(productDetails);
-    let responseData;
-    let product = productDetails;
-
-    let formData = new FormData();
-    formData.append('product', image);
-
-    await fetch('https://rh-ecommerce-backend.onrender.com/upload', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json'
-      },
-      body: formData,
-    }).then((resp) => resp.json()).then((data) => {responseData = data })
-
-    if (responseData.success) {
-      product.image = responseData.image_url;
-      console.log(product)
-      await fetch('https://rh-ecommerce-backend.onrender.com/addproduct', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(product),
-      }).then((resp) => resp.json()).then((data) => {
-        data.success ? alert('Product Added') : alert('Upload Failed')
-      })
-    }
-  }*/}
-
   const Add_Product = async () => {
     console.log(productDetails);
     let responseData;
     let product = { ...productDetails }; // Create a copy of productDetails
-  
+
     let formData = new FormData();
     formData.append('product', image);
-  
+
     try {
       // Upload the image
       const uploadResponse = await fetch('https://roadhouse-backend.onrender.com/upload', {
@@ -72,41 +40,44 @@ const AddProduct = () => {
         },
         body: formData,
       });
-  
+
       responseData = await uploadResponse.json();
-  
-      if (!responseData.success) {
-        alert('Image upload failed');
-        return;
+
+      if (responseData.success) {
+        product.image = responseData.image_url;
+        console.log(product);
+
+        await fetch('https://roadhouse-backend.onrender.com/addproduct', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(product),
+        });
+
+
+        const addProductData = Response.json();
+
+        if (addProductData.success) {
+          alert('Product Added');
+        } else {
+          alert('Upload Failed');
+        }
       }
-  
+
       // Add the image URL to the product details
-      product.image = responseData.image_url;
-      console.log(product);
-  
-      // Add the product
-      const addProductResponse = await fetch('https://roadhouse-backend.onrender.com/addproduct', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(product),
-      });
-  
-      const addProductData = await addProductResponse.json();
-  
-      if (addProductData.success) {
-        alert('Product Added');
-      } else {
-        alert('Upload Failed');
-      }
-    } catch (error) {
+
+
+      // Add the produc
+
+    }
+    catch (error) {
       console.error('Error:', error);
       alert('An error occurred. Please try again.');
     }
-  };
-  
+
+  }
 
 
   return (
