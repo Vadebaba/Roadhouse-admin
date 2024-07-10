@@ -65,7 +65,7 @@ const AddProduct = () => {
   
     try {
       // Upload the image
-      const uploadResponse = await fetch('https://rh-ecommerce-backend.onrender.com/upload', {
+      const uploadResponse = await fetch('https://roadhouse-backend.onrender.com/upload', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -85,7 +85,7 @@ const AddProduct = () => {
       console.log(product);
   
       // Add the product
-      const addProductResponse = await fetch('https://rh-ecommerce-backend.onrender.com/addproduct', {
+      const addProductResponse = await fetch('https://roadhouse-backend.onrender.com/addproduct', {
         method: 'POST',
         headers: {
           Accept: 'application/json',

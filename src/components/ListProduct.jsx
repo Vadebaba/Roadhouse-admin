@@ -8,7 +8,7 @@ const ListProduct = () => {
  
   const fetchInfo = async () => {
     try {
-      const response = await fetch('https://rh-ecommerce-backend.onrender.com/allproducts');
+      const response = await fetch('https://roadhouse-backend.onrender.com/allproducts');
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -26,7 +26,7 @@ const ListProduct = () => {
 
 
   const remove_product = async (id) => {
-    await fetch('https://rh-ecommerce-backend.onrender.com/removeproduct', {
+    await fetch('https://roadhouse-backend.onrender.com/removeproduct', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
