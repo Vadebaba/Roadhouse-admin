@@ -47,7 +47,7 @@ const AddProduct = () => {
         product.image = responseData.image_url;
         console.log(product);
 
-        await fetch('https://roadhouse-backend.onrender.com/addproduct', {
+        const addProductResponse = await fetch('https://roadhouse-backend.onrender.com/addproduct', {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -55,9 +55,8 @@ const AddProduct = () => {
           },
           body: JSON.stringify(product),
         });
-
-
-        const addProductData = Response.json();
+    
+        const addProductData = await addProductResponse.json();
 
         if (addProductData.success) {
           alert('Product Added');
