@@ -31,51 +31,32 @@ const AddProduct = () => {
     let formData = new FormData();
     formData.append('product', image);
 
-    try {
-      // Upload the image
-      const uploadResponse = await fetch('https://roadhouse-backend.onrender.com/upload', {
+
+    // Upload the image
+    await fetch('https://roadhouse-backend.onrender.com/upload', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+      },
+      body: formData,
+    }).then((resp) => resp.json()).then((data) =>{responseData = data})
+
+
+    if (responseData.success) {
+      product.image = responseData.image_url;
+      console.log(product);
+
+      await fetch('https://roadhouse-backend.onrender.com/addproduct', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
-        body: formData,
-      });
-
-      responseData = await uploadResponse.json();
-
-      if (responseData.success) {
-        product.image = responseData.image_url;
-        console.log(product);
-
-        const addProductResponse = await fetch('https://roadhouse-backend.onrender.com/addproduct', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(product),
-        });
-    
-        const addProductData = await addProductResponse.json();
-
-        if (addProductData.success) {
-          alert('Product Added');
-        } else {
-          alert('Upload Failed');
-        }
-      }
-
-      // Add the image URL to the product details
-
-
-      // Add the produc
-
+        body: JSON.stringify(product),
+      }).then((resp) => resp.json()).then((data) => {
+        data.success ? alert("Product Added") : alert('Upload Failed')
+      })
     }
-    catch (error) {
-      console.error('Error:', error);
-      alert('An error occurred. Please try again.');
-    }
-
   }
 
 
