@@ -23,60 +23,75 @@ const AddProduct = () => {
     setProductDetails({ ...productDetails, [e.target.name]: e.target.value })
   }
 
-  const Add_Product = async () => {
+  /*const Add_Product = async () => {
     console.log(productDetails);
     let responseData;
     let product = { ...productDetails }; // Create a copy of productDetails
 
     let formData = new FormData();
     formData.append('product', image);
+*/
 
+    const Add_Product = async () => {
 
-    try {
-      // Upload the image
-      const uploadResponse = await fetch('https://roadhouse-backend.onrender.com/upload', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-        },
-        body: formData,
-      });
+      console.log(productDetails);
+    //  let responseData;
+      let product = { ...productDetails }; // Create a copy of productDetails
+  
+      let formData = new FormData();
+      formData.append('product', image)
 
-      responseData = await uploadResponse.json();
-
-      if (!responseData.success) {
-        alert('Image upload failed');
-        return;
+      try {
+        // Upload the image
+        const uploadResponse = await fetch('https://roadhouse-backend.onrender.com/upload', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+          },
+          body: formData,
+        });
+    
+        const responseData = await uploadResponse.json();
+    
+        if (!responseData.success) {
+          alert('Image upload failed');
+          return;
+        }
+    
+        // Add the image URL to the product details
+        product.image = responseData.image_url;
+        console.log(product);
+    
+        // Add the product
+        const addProductResponse = await fetch('https://roadhouse-backend.onrender.com/addproduct', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(product),
+        });
+    
+        if (!addProductResponse.ok) {
+          const errorData = await addProductResponse.json();
+          console.error('Error adding product:', errorData.message);
+          alert(`Upload Failed: ${errorData.message}`);
+          return;
+        }
+    
+        const addProductData = await addProductResponse.json();
+    
+        if (addProductData.success) {
+          alert('Product Added');
+        } else {
+          alert(`Upload Failed: ${addProductData.message}`);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
       }
-
-      // Add the image URL to the product details
-      product.image = responseData.image_url;
-      console.log(product);
-
-      // Add the product
-      const addProductResponse = await fetch('https://roadhouse-backend.onrender.com/addproduct', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(product),
-      });
-
-      const addProductData = await addProductResponse.json();
-
-      if (addProductData.success) {
-        alert('Product Added');
-      } else {
-        alert('Upload Failed');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('An error occurred. Please try again.');
-    }
-
-
-
+    };
+    
 
     /* Upload the image
     await fetch('https://roadhouse-backend.onrender.com/upload', {
@@ -103,7 +118,9 @@ const AddProduct = () => {
         data.success ? alert("Product Added") : alert('Upload Failed')
       })
     }*/
-  }
+  
+
+
 
 
   return (
@@ -147,10 +164,10 @@ const AddProduct = () => {
         <input onChange={imageHandler} type="file" name='image' id='file-input' hidden className='bg-primary
         max-w-80 w-full py-3 px-4' />
       </div>
-      <button onClick={() => Add_Product()} className='btn_dark_rounded mt-4 flexCenter gap-x-3'><MdAdd />Add Product</button>
+      <button  onClick={Add_Product} className='btn_dark_rounded mt-4 flexCenter gap-x-3'><MdAdd />Add Product</button>
 
     </div>
   )
 }
 
-export default AddProduct
+export default AddProduct;
